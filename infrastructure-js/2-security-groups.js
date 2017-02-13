@@ -14,18 +14,18 @@
     "ECSHostSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "VpcId": "VPC",
+        "VpcId": { "Ref" : "VPC" },
         "GroupDescription": "Access to the ECS hosts and the tasks/containers that run on them",
         "SecurityGroupIngress": [
           {
-            "SourceSecurityGroupId": "LoadBalancerSecurityGroup",
+            "SourceSecurityGroupId":  { "Ref" : "LoadBalancerSecurityGroup" },
             "IpProtocol": -1
           }
         ],
         "Tags": [
           {
             "Key": "Name",
-            "Value": "${EnvironmentName}-ECS-Hosts"
+            "Value": { "Fn::Sub" : "${EnvironmentName}-ECS-Hosts" }
           }
         ]
       }
@@ -33,7 +33,7 @@
     "LoadBalancerSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "VpcId": "VPC",
+        "VpcId": { "Ref" : "VPC" },
         "GroupDescription": "Access to the load balancer that sits in front of ECS",
         "SecurityGroupIngress": [
           {
@@ -44,7 +44,7 @@
         "Tags": [
           {
             "Key": "Name",
-            "Value": "${EnvironmentName}-LoadBalancers"
+            "Value":  { "Fn::Sub" : "${EnvironmentName}-LoadBalancers"}
           }
         ]
       }
@@ -53,11 +53,11 @@
   "Outputs": {
     "ECSHostSecurityGroup": {
       "Description": "A reference to the security group for ECS hosts",
-      "Value": "ECSHostSecurityGroup"
+      "Value": { "Ref" : "ECSHostSecurityGroup" }
     },
     "LoadBalancerSecurityGroup": {
       "Description": "A reference to the security group for load balancers",
-      "Value": "LoadBalancerSecurityGroup"
+      "Value": { "Ref" : "LoadBalancerSecurityGroup" }
     }
   }
 }
