@@ -22,15 +22,15 @@
     "LoadBalancer": {
       "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
       "Properties": {
-        "Name": "EnvironmentName",
-        "Subnets": "Subnets",
+        "Name": { "Ref" : "EnvironmentName" },
+        "Subnets":  { "Ref" : "Subnets" },
         "SecurityGroups": [
-          "SecurityGroup"
+           { "Ref" : "SecurityGroup" }
         ],
         "Tags": [
           {
             "Key": "Name",
-            "Value": "EnvironmentName"
+            "Value": { "Ref" : "EnvironmentName" }
           }
         ]
       }
@@ -38,13 +38,13 @@
     "LoadBalancerListener": {
       "Type": "AWS::ElasticLoadBalancingV2::Listener",
       "Properties": {
-        "LoadBalancerArn": "LoadBalancer",
+        "LoadBalancerArn": { "Ref" : "LoadBalancer" },
         "Port": 80,
         "Protocol": "HTTP",
         "DefaultActions": [
           {
             "Type": "forward",
-            "TargetGroupArn": "DefaultTargetGroup"
+            "TargetGroupArn":  { "Ref" : "DefaultTargetGroup" }
           }
         ]
       }
@@ -53,7 +53,7 @@
       "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
       "Properties": {
         "Name": "default",
-        "VpcId": "VPC",
+        "VpcId": { "Ref" : "VPC" },
         "Port": 80,
         "Protocol": "HTTP"
       }
@@ -62,15 +62,15 @@
   "Outputs": {
     "LoadBalancer": {
       "Description": "A reference to the Application Load Balancer",
-      "Value": "LoadBalancer"
+      "Value": { "Ref" : "LoadBalancer" }
     },
     "LoadBalancerUrl": {
       "Description": "The URL of the ALB",
-      "Value": "LoadBalancer.DNSName"
+      "Value": { "Fn::GetAtt" : [ "LoadBalancer", "DNSName" ] }
     },
     "Listener": {
       "Description": "A reference to a port 80 listener",
-      "Value": "LoadBalancerListener"
+      "Value": { "Ref" : "LoadBalancerListener" }
     }
   }
 }
